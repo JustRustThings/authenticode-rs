@@ -258,14 +258,14 @@ impl AuthenticodeSignature {
         self.signed_data
             .certificates
             .as_ref()
-            .unwrap()
-            .0
-            .iter()
-            .map(|cert| {
+            .into_iter()
+            .map(|v| v.0.iter())
+            .flatten()
+            .flat_map(|cert| {
                 if let cms::cert::CertificateChoices::Certificate(cert) = cert {
-                    cert
+                    Some(cert)
                 } else {
-                    panic!()
+                    None
                 }
             })
     }
